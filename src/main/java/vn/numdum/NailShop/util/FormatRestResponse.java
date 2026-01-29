@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletResponse;
-import vn.numdum.NailShop.domain.RestReponse;
+import vn.numdum.NailShop.domain.RestResponse;
 
 @RestControllerAdvice
 public class FormatRestResponse implements ResponseBodyAdvice {
@@ -26,16 +26,19 @@ public class FormatRestResponse implements ResponseBodyAdvice {
             ServerHttpResponse response) {
         HttpServletResponse servletResponse = ((ServletServerHttpResponse) response).getServletResponse();
         int status = servletResponse.getStatus();
-        RestReponse<Object> res = new RestReponse<Object>();
-        res.setStatuscode(status);
+        RestResponse<Object> res = new RestResponse<Object>();
+        res.setStatusCode(status);
+        if (body instanceof String) {
+            return body;
+        }
         if (status >= 400) {
             return body;
         } else {
-
             res.setData(body);
             res.setMessage("call api success");
         }
-        return body;
+
+        return res;
     }
 
 }

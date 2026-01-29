@@ -1,4 +1,4 @@
-package vn.numdum.NailShop.service.error;
+package vn.numdum.NailShop.util.error;
 
 public class IdInvalidException extends Exception {
 

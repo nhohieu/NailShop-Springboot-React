@@ -1,17 +1,25 @@
 package vn.numdum.NailShop.domain;
 
-public class RestReponse<T> {
-    private int Statuscode;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({
+        "statusCode",
+        "message",
+        "data",
+        "error"
+})
+public class RestResponse<T> {
+    private int statusCode;
     private String error;
     private Object message;
     private T data;
 
-    public int getStatuscode() {
-        return Statuscode;
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public void setStatuscode(int statuscode) {
-        Statuscode = statuscode;
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
     }
 
     public String getError() {

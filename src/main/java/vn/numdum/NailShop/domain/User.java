@@ -18,6 +18,19 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String Role;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRole() {
+        return Role;
+    }
+
+    public void setRole(String role) {
+        Role = role;
+    }
 
     public String getName() {
         return name;
