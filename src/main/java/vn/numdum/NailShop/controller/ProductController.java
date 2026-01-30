@@ -2,6 +2,8 @@ package vn.numdum.NailShop.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turkraft.springfilter.boot.Filter;
+
 import vn.numdum.NailShop.domain.Product;
 import vn.numdum.NailShop.domain.User;
 import vn.numdum.NailShop.domain.DTO.ResultPaginationDTO;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,14 +47,10 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<ResultPaginationDTO> fetchAllProduct(
-            @RequestParam("current") Optional<String> currentOptional,
-            @RequestParam("pageSize") Optional<String> pageSizeOptional) {
-        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : " ";
-        String sPagesize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : " ";
-        int current = Integer.parseInt(sCurrent);
-        int pagesize = Integer.parseInt(sPagesize);
-        Pageable pageable = PageRequest.of(current - 1, pagesize);
-        return ResponseEntity.ok(this.productService.fetchAllProduct(pageable));
+            @Filter Specification<Product> spec,
+            Pageable pageable) {
+
+        return ResponseEntity.ok(this.productService.fetchAllProduct(spec, pageable));
     }
 
     @DeleteMapping("/products/{id}")

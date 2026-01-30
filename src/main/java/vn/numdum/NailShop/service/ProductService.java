@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.numdum.NailShop.domain.Product;
@@ -34,11 +35,11 @@ public class ProductService {
         return null;
     }
 
-    public ResultPaginationDTO fetchAllProduct(Pageable pageable) {
-        Page<Product> pageProduct = this.productRepository.findAll(pageable);
+    public ResultPaginationDTO fetchAllProduct(Specification<Product> spec, Pageable pageable) {
+        Page<Product> pageProduct = this.productRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Meta mt = new Meta();
-        mt.setPage(pageProduct.getNumber() + 1);
+        mt.setPage(pageProduct.getNumber());
         mt.setPageSize(pageProduct.getSize());
         mt.setPages(pageProduct.getTotalPages());
         mt.setTotal(pageProduct.getTotalElements());

@@ -2,6 +2,8 @@ package vn.numdum.NailShop.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turkraft.springfilter.boot.Filter;
+
 import vn.numdum.NailShop.domain.User;
 import vn.numdum.NailShop.domain.DTO.ResultPaginationDTO;
 import vn.numdum.NailShop.service.UserService;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.http.HttpStatus;
@@ -61,14 +64,10 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<ResultPaginationDTO> GetAllUser(
-            @RequestParam("current") Optional<String> currentOptional,
-            @RequestParam("pageSize") Optional<String> pageSizeOptional) {
-        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : " ";
-        String sPagesize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : " ";
-        int current = Integer.parseInt(sCurrent);
-        int pagesize = Integer.parseInt(sPagesize);
-        Pageable pageable = PageRequest.of(current - 1, pagesize);
-        return ResponseEntity.ok(this.userService.fetchAllUser(pageable));
+            @Filter Specification<User> spec,
+            Pageable pageable) {
+
+        return ResponseEntity.ok(this.userService.fetchAllUser(spec, pageable));
     }
 
     @PutMapping("/users")
