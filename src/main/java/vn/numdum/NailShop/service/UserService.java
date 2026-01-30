@@ -2,13 +2,19 @@ package vn.numdum.NailShop.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vn.numdum.NailShop.domain.User;
 import vn.numdum.NailShop.domain.DTO.Meta;
+import vn.numdum.NailShop.domain.DTO.RestCreateUserDTO;
+import vn.numdum.NailShop.domain.DTO.RestUpdateUserDTO;
+import vn.numdum.NailShop.domain.DTO.RestUserDTO;
 import vn.numdum.NailShop.domain.DTO.ResultPaginationDTO;
 import vn.numdum.NailShop.repository.UserRepository;
 
@@ -40,12 +46,22 @@ public class UserService {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Meta mt = new Meta();
-        mt.setPage(pageUser.getNumber());
-        mt.setPageSize(pageUser.getSize());
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
         mt.setPages(pageUser.getTotalPages());
         mt.setTotal(pageUser.getTotalElements());
         rs.setMeta(mt);
-        rs.setResult(pageUser.getContent());
+
+        List<RestUserDTO> listUser = pageUser.getContent()
+                .stream().map(item -> new RestUserDTO(
+                        item.getId(),
+                        item.getAddress(),
+                        item.getEmail(),
+                        item.getGender(),
+                        item.getName()))
+
+                .collect(Collectors.toList());
+        rs.setResult(listUser);
         return rs;
     }
 
@@ -64,5 +80,41 @@ public class UserService {
 
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    public boolean isEmailExist(String email) {
+
+        return this.userRepository.existsBy(email);
+    }
+
+    public RestCreateUserDTO convertToResCreateUserDTO(User user) {
+        RestCreateUserDTO res = new RestCreateUserDTO();
+        res.setAddress(user.getAddress());
+        res.setEmail(user.getEmail());
+        res.setGender(user.getGender());
+        res.setId(user.getId());
+        res.setName(user.getName());
+        return res;
+    }
+
+    public RestUserDTO convertToResUserDTO(User user) {
+        RestUserDTO res = new RestUserDTO();
+        res.setAddress(user.getAddress());
+        res.setEmail(user.getEmail());
+        res.setGender(user.getGender());
+        res.setId(user.getId());
+        res.setName(user.getName());
+        return res;
+    }
+
+    public RestUpdateUserDTO convertToResUpdateUserDTO(User user) {
+        RestUpdateUserDTO res = new RestUpdateUserDTO();
+        res.setId(user.getId());
+        res.setAddress(user.getAddress());
+        res.setGender(user.getGender());
+        res.setEmail(user.getEmail());
+        res.setName(user.getName());
+
+        return res;
     }
 }

@@ -39,8 +39,8 @@ public class ProductService {
         Page<Product> pageProduct = this.productRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();
         Meta mt = new Meta();
-        mt.setPage(pageProduct.getNumber());
-        mt.setPageSize(pageProduct.getSize());
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
         mt.setPages(pageProduct.getTotalPages());
         mt.setTotal(pageProduct.getTotalElements());
         rs.setMeta(mt);

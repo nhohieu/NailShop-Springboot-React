@@ -9,4 +9,5 @@ import vn.numdum.NailShop.domain.User;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     User findByEmail(String email);
 
+    boolean existsBy(String email);
 }

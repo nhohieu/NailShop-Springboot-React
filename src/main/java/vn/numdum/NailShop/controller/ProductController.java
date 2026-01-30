@@ -8,6 +8,7 @@ import vn.numdum.NailShop.domain.Product;
 import vn.numdum.NailShop.domain.User;
 import vn.numdum.NailShop.domain.DTO.ResultPaginationDTO;
 import vn.numdum.NailShop.service.ProductService;
+import vn.numdum.NailShop.util.annotation.ApiMessage;
 import vn.numdum.NailShop.util.error.IdInvalidException;
 
 import java.util.List;
@@ -35,17 +36,20 @@ public class ProductController {
     }
 
     @PostMapping("/products")
+    @ApiMessage("create product ")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product pr = this.productService.handleCreateProduct(product);
         return ResponseEntity.ok(pr);
     }
 
     @GetMapping("/products/{id}")
+    @ApiMessage("fetch product by id")
     public ResponseEntity<Product> fetchProductByID(@PathVariable("id") long id) {
         return ResponseEntity.status(HttpStatus.OK).body(this.productService.fetchProductByid(id));
     }
 
     @GetMapping("/products")
+    @ApiMessage("fetch all product ")
     public ResponseEntity<ResultPaginationDTO> fetchAllProduct(
             @Filter Specification<Product> spec,
             Pageable pageable) {
@@ -54,6 +58,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/{id}")
+    @ApiMessage("delete  product ")
     public ResponseEntity<String> DeleteProduct(@PathVariable("id") long id) throws IdInvalidException {
 
         this.productService.handleDeleteUser(id);
@@ -61,6 +66,7 @@ public class ProductController {
     }
 
     @PutMapping("/products")
+    @ApiMessage("update product ")
     public ResponseEntity<Product> UpdateUserById(@RequestBody Product product) {
         Product hieuproduct = this.productService.handleUpdateUser(product);
         return ResponseEntity.ok(hieuproduct);

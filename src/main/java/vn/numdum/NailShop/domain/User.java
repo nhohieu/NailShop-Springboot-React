@@ -1,14 +1,21 @@
 package vn.numdum.NailShop.domain;
 
-import java.time.Instant;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
+import vn.numdum.NailShop.util.Constant.GenderEnum;
 
 //lombok chua dung
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -16,52 +23,17 @@ public class User {
     private Long id;
 
     private String name;
+
+    @NotBlank(message = "email không được để trống ")
     private String email;
+    @NotBlank(message = "password không được để trống")
     private String password;
-    private String Role;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String address;
 
-    public String getRole() {
-        return Role;
-    }
+    @Enumerated(EnumType.STRING)
+    private GenderEnum gender;
 
-    public void setRole(String role) {
-        Role = role;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String refreTokenString;
 
 }
