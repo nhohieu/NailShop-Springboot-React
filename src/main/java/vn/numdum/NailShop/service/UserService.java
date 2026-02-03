@@ -117,4 +117,12 @@ public class UserService {
 
         return res;
     }
+
+    public void updateUserTokne(String token, String email) {
+        User currentUser = this.handleGetUserByUsername(email);
+        if (currentUser != null) {
+            currentUser.setRefreToken(token);
+            this.userRepository.save(currentUser);
+        }
+    }
 }

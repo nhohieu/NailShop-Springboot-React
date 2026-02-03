@@ -1,6 +1,7 @@
 package vn.numdum.NailShop.domain;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,6 +35,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;
 
-    private String refreTokenString;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String refreToken;
 
 }
